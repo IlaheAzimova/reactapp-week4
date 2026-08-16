@@ -242,6 +242,61 @@ body {
 .fav-toggle-btn {
   background: transparent;
   border: none;
+  color: white;
   cursor: pointer;
   font-size: 18px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sim-401 {
+  background: #d29922;
+  color: #000;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.panel-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.btn-add-override {
+  width: 120px;
+  margin-top: 0;
+}
+
+.list-header-title {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.filter-active {
+  background-color: #238636;
+  color: white;
+}
+
+.filter-inactive {
+  background-color: #21262d;
+  color: white;
+}
+
+.media-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty-list-text {
+  color: #8b949e;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
 }

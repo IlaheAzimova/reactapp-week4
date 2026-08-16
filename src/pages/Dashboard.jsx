@@ -1,45 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMedia } from '../context/MediaContext';
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const userEmail = localStorage.getItem('userEmail') || 'İstifadəçi';
 
-    const [mediaList, setMediaList] = useState([
-        { id: 1, title: 'Interstellar', type: 'Film', year: 2014, favorite: true },
-        { id: 2, title: 'Clean Code', type: 'Kitab', year: 2008, favorite: false },
-        { id: 3, title: 'Inception', type: 'Film', year: 2010, favorite: false }
-    ]);
+    const { mediaList, toggleFavorite, addMedia } = useMedia();
 
     const [title, setTitle] = useState('');
     const [type, setType] = useState('Film');
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
-    const handleLogout = () => {
+
+    const handleLogout = useCallback(() => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('userEmail');
         navigate('/login', { replace: true });
-    };
+    }, [navigate]);
 
-    const toggleFavorite = (id) => {
-        setMediaList(mediaList.map(item =>
-            item.id === id ? { ...item, favorite: !item.favorite } : item
-        ));
-    };
+    const simulateTokenExpiration = useCallback(() => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userEmail');
+        alert('Token vaxtı bitdi (401 Unauthorized)! Login səhifəsinə yönləndirilirsiniz.');
+        navigate('/login', { replace: true });
+    }, [navigate]);
 
-    const handleAddMedia = (e) => {
+    const handleAddSubmit = (e) => {
         e.preventDefault();
         if (!title.trim()) return;
 
-        const newItem = {
-            id: Date.now(),
-            title: title.trim(),
-            type,
-            year: new Date().getFullYear(),
-            favorite: false
-        };
-
-        setMediaList([newItem, ...mediaList]);
+        addMedia(title.trim(), type);
         setTitle('');
     };
 
@@ -55,15 +46,24 @@ export default function Dashboard() {
                     <h3>🎬 Şəxsi Media Arxivi (Watchlist)</h3>
                     <span>Aktiv Sessiya: {userEmail}</span>
                 </div>
-                <button onClick={handleLogout} className="btn-logout">
-                    Çıxış Et
-                </button>
+
+                <div className="nav-actions">
+                    <button
+                        onClick={simulateTokenExpiration}
+                        className="btn-sim-401"
+                    >
+                        Simulate 401
+                    </button>
+
+                    <button onClick={handleLogout} className="btn-logout">
+                        Çıxış Et
+                    </button>
+                </div>
             </div>
 
-
-            <div className="panel-card" style={{ marginBottom: '20px' }}>
-                <h4 style={{ marginBottom: '12px' }}>Yeni Film və ya Kitab Əlavə Et</h4>
-                <form onSubmit={handleAddMedia}>
+            <div className="panel-card panel-margin-bottom">
+                <h4>Yeni Film və ya Kitab Əlavə Et</h4>
+                <form onSubmit={handleAddSubmit}>
                     <div className="media-form-row">
                         <input
                             type="text"
@@ -81,29 +81,27 @@ export default function Dashboard() {
                             <option value="Film">Film</option>
                             <option value="Kitab">Kitab</option>
                         </select>
-                        <button type="submit" className="btn-submit" style={{ width: '120px', marginTop: 0 }}>
+                        <button type="submit" className="btn-submit btn-add-override">
                             Əlavə Et
                         </button>
                     </div>
                 </form>
             </div>
 
-
             <div className="panel-card">
                 <div className="list-header-row">
-                    <h4 style={{ margin: 0, border: 'none', padding: 0 }}>Kolleksiya Siyahısı</h4>
+                    <h4 className="list-header-title">Kolleksiya Siyahısı (Quality Checked)</h4>
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                        className="filter-btn"
-                        style={{ backgroundColor: showFavoritesOnly ? '#238636' : '#21262d', color: 'white' }}
+                        className={`filter-btn ${showFavoritesOnly ? 'filter-active' : 'filter-inactive'}`}
                     >
                         {showFavoritesOnly ? '⭐ Bütün Siyahı' : '⭐ Yalnız Sevimlilər'}
                     </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className="media-list-container">
                     {displayedList.length === 0 ? (
-                        <p style={{ color: '#8b949e', fontSize: '13px', textAlign: 'center', padding: '20px' }}>Heç bir element tapılmadı.</p>
+                        <p className="empty-list-text">Heç bir element tapılmadı.</p>
                     ) : (
                         displayedList.map(item => (
                             <div key={item.id} className="media-item-card">

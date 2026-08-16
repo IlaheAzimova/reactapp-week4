@@ -15,3 +15,10 @@ Sistemə artıq daxil olmuş adam yenidən Login səhifəsinə qayıda bilmir, b
 "Çıxış et" düyməsinə basanda localStorage-dəki tokeni silirəm və brauzerin geri düyməsi ilə təkrar Dashboard-a qayıtmağın qarşısını alıram.
 
 Dashboard-da film və kitabları saxlamaq, yenisini əlavə etmək və ulduzla favoritə atmaq üçün ilkin interfeysi qurdum.
+
+## Checkpoint 3: Qlobal State İdarəetməsi (Context API + useReducer)
+Burada komponentlər arası məlumat ötürülməsini səliqəyə salmaq üçün qlobal state mexanizminə keçdim.  MediaContext yaradaraq React-in useReducer hook-unu tətbiq etdim.
+
+Bütün media siyahısı, yeni elementin əlavə olunması və favorit icon  dəyişdirilməsi kimi əməliyyatları artıq səhifənin daxilində deyil, mərkəzi reducer funksiyasında idarə edirəm.
+
+Dashboard səhifəsində custom useMedia hook-u vasitəsilə bu qlobal state-ə qoşulub məlumatları rahatlıqla çəkir və yeniləyirəm.
