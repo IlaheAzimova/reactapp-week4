@@ -5,23 +5,26 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import { MediaProvider } from './context/MediaContext';
 import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export default function App() {
     return (
-        <BrowserRouter>
-            <MediaProvider>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/login" replace />} />
+        <ErrorBoundary>
+            <BrowserRouter>
+                <MediaProvider>
+                    <Routes>
+                        <Route path="/" element={<Navigate to="/login" replace />} />
 
-                    <Route path="/login" element={<Login />} />
+                        <Route path="/login" element={<Login />} />
 
-                    <Route element={<ProtectedRoute />}>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                    </Route>
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                        </Route>
 
-                    <Route path="*" element={<Navigate to="/login" replace />} />
-                </Routes>
-            </MediaProvider>
-        </BrowserRouter>
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </Routes>
+                </MediaProvider>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }

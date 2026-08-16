@@ -35,3 +35,6 @@ Login və yeni media əlavəetmə formalarında ciddi validasiya yoxlamaları (b
 Context API & useReducer: Hər şeyi bir yerdə saxlamaq üçün Context və useReducer-dən istifadə etmişəm ki, kod qarışmasın.
 
 Serverdə nəsə problem olub çökən olmasın deyə try-catch ilə hər şeyi nəzarətdə saxlamışam.
+
+## Checkpoint 6- Error Boundary
+Layihəyə ErrorBoundary komponenti əlavə etmişəm. Hər hansı alt komponentdə gözlənilməz JavaScript xətası baş verdikdə bütün tətbiqin çöküb ağ ekran verməsinin qarşısı alınır. componentDidCatch və getDerivedStateFromError metodları vasitəsilə xəta tutulur və istifadəçiyə səliqəli bir xəta ekranı ilə yeniləmə düyməsi təqdim olunur.
