@@ -1,16 +1,17 @@
-# React + Vite
+## Checkpoint 1: Routing
+React Router qurdum və Login ilə Dashboard səhifələri arasında keçidləri təyin etdim.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ProtectedRoute komponenti yazdım ki, sistemə daxil olmayan heç kim birbaşa linki yazıb Dashboard-a girə bilməsin.
 
-Currently, two official plugins are available:
+Əgər istifadəçinin tokeni yoxdursa, avtomatik olaraq Login səhifəsinə göndərilir.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Checkpoint 2: Auth axını
+Login formasını hazırladım. İstifadəçi email və şifrə yazdıqda localStorage-ə token yazılır və istifadəçi içəri buraxılır.
 
-## React Compiler
+Səhifəni yeniləyəndə (refresh edəndə) token yerində qalır və istifadəçi sistemdən atmır.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Sistemə artıq daxil olmuş adam yenidən Login səhifəsinə qayıda bilmir, birbaşa Dashboard-a yönləndirilir.
 
-## Expanding the ESLint configuration
+"Çıxış et" düyməsinə basanda localStorage-dəki tokeni silirəm və brauzerin geri düyməsi ilə təkrar Dashboard-a qayıtmağın qarşısını alıram.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Dashboard-da film və kitabları saxlamaq, yenisini əlavə etmək və ulduzla favoritə atmaq üçün ilkin interfeysi qurdum.
