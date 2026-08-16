@@ -38,3 +38,6 @@ Serverdə nəsə problem olub çökən olmasın deyə try-catch ilə hər şeyi 
 
 ## Checkpoint 6- Error Boundary
 Layihəyə ErrorBoundary komponenti əlavə etmişəm. Hər hansı alt komponentdə gözlənilməz JavaScript xətası baş verdikdə bütün tətbiqin çöküb ağ ekran verməsinin qarşısı alınır. componentDidCatch və getDerivedStateFromError metodları vasitəsilə xəta tutulur və istifadəçiyə səliqəli bir xəta ekranı ilə yeniləmə düyməsi təqdim olunur.
+
+## Checkpoint 7: Qovluq strukturu
+Feature-based : Kodları səliqəli saxlamaq üçün hər şeyi bir yerə yığmaq əvəzində funksiyalarına görə qovluqlara böldüm. İndi auth (girişlə bağlı hər şey) və media (əsas səhifə və kontekst) öz ayrı qovluqlarındadır. Bu cür struktur tətbiqi böyütməyi və hər hansı faylı tapıb düzəltməyi xeyli asanlaşdırır. Ortaq komponentləri isə components içində saxlamışam.

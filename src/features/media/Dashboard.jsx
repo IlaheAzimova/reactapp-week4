@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMedia } from '../context/MediaContext';
+import { useMedia } from './MediaContext';
 
 export default function Dashboard() {
     const navigate = useNavigate();

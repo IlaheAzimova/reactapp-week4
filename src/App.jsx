@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from './routes/ProtectedRoute';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import { MediaProvider } from './context/MediaContext';
+import ProtectedRoute from './features/auth/ProtectedRoute';
+import Login from './features/auth/Login';
+import Dashboard from './features/media/Dashboard';
+import { MediaProvider } from './features/media/MediaContext';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
