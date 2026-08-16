@@ -22,3 +22,7 @@ Burada komponentlər arası məlumat ötürülməsini səliqəyə salmaq üçün
 Bütün media siyahısı, yeni elementin əlavə olunması və favorit icon  dəyişdirilməsi kimi əməliyyatları artıq səhifənin daxilində deyil, mərkəzi reducer funksiyasında idarə edirəm.
 
 Dashboard səhifəsində custom useMedia hook-u vasitəsilə bu qlobal state-ə qoşulub məlumatları rahatlıqla çəkir və yeniləyirəm.
+
+##  Checkpoint 4: Form Validasiyası 
+Login və yeni media əlavəetmə formalarında ciddi validasiya yoxlamaları (boşluq, simvol uzunluğu və email formatı) tətbiq etdim.
+İstifadəçi səhv məlumat daxil etdikdə xəta bildirişləri görünür və düzgün yazmağa başlayan kimi avtomatik təmizlənir.

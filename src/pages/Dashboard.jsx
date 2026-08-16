@@ -10,8 +10,8 @@ export default function Dashboard() {
 
     const [title, setTitle] = useState('');
     const [type, setType] = useState('Film');
+    const [formError, setFormError] = useState('');
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-
 
     const handleLogout = useCallback(() => {
         localStorage.removeItem('authToken');
@@ -28,8 +28,18 @@ export default function Dashboard() {
 
     const handleAddSubmit = (e) => {
         e.preventDefault();
-        if (!title.trim()) return;
 
+        if (!title.trim()) {
+            setFormError('Media başlığı boş ola bilməz!');
+            return;
+        }
+
+        if (title.trim().length < 2) {
+            setFormError('Başlıq ən azı 2 simvoldan ibarət olmalıdır.');
+            return;
+        }
+
+        setFormError('');
         addMedia(title.trim(), type);
         setTitle('');
     };
@@ -48,10 +58,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="nav-actions">
-                    <button
-                        onClick={simulateTokenExpiration}
-                        className="btn-sim-401"
-                    >
+                    <button onClick={simulateTokenExpiration} className="btn-sim-401">
                         Simulate 401
                     </button>
 
@@ -69,9 +76,11 @@ export default function Dashboard() {
                             type="text"
                             placeholder="Adı..."
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                                if (formError) setFormError('');
+                            }}
                             className="media-input"
-                            required
                         />
                         <select
                             value={type}
@@ -85,12 +94,13 @@ export default function Dashboard() {
                             Əlavə Et
                         </button>
                     </div>
+                    {formError && <span className="error-message-text">⚠️ {formError}</span>}
                 </form>
             </div>
 
             <div className="panel-card">
                 <div className="list-header-row">
-                    <h4 className="list-header-title">Kolleksiya Siyahısı (Quality Checked)</h4>
+                    <h4 className="list-header-title">Kolleksiya Siyahısı (Validated Forms)</h4>
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
                         className={`filter-btn ${showFavoritesOnly ? 'filter-active' : 'filter-inactive'}`}
