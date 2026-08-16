@@ -26,3 +26,12 @@ Dashboard səhifəsində custom useMedia hook-u vasitəsilə bu qlobal state-ə 
 ##  Checkpoint 4: Form Validasiyası 
 Login və yeni media əlavəetmə formalarında ciddi validasiya yoxlamaları (boşluq, simvol uzunluğu və email formatı) tətbiq etdim.
 İstifadəçi səhv məlumat daxil etdikdə xəta bildirişləri görünür və düzgün yazmağa başlayan kimi avtomatik təmizlənir.
+
+## Checkpoint 5- CRUD emeliyyatlari
+ Məlumatları Mock API-yə bağlamışam. İstənilən vaxt yeni şeylər əlavə edə bilirəm (POST), siyahını çəkirəm (GET), favorite iconunu dəyişirəm (PUT/PATCH) və silirəm (DELETE).
+
+ Sil düyməsinə və ya əlavə et-ə basanda serveri gözləmirəm, interfeys dərhal özü yenilənir ki, sürətli işləsin.
+
+Context API & useReducer: Hər şeyi bir yerdə saxlamaq üçün Context və useReducer-dən istifadə etmişəm ki, kod qarışmasın.
+
+Serverdə nəsə problem olub çökən olmasın deyə try-catch ilə hər şeyi nəzarətdə saxlamışam.
