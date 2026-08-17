@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -16,31 +16,13 @@ export default function Login() {
         }
     }, [navigate]);
 
-    const handleLoginSubmit = (e) => {
-        e.preventDefault();
-
-        // 1. Boşluq yoxlaması
-        if (!email.trim() || !password.trim()) {
-            setError('Bütün sahələri doldurun!');
-            return;
-        }
-
-        // 2. Email formatı yoxlaması (@ simvolu)
-        if (!email.includes('@') || !email.includes('.')) {
-            setError('Zəhmət olmasa etibarlı email ünvanı daxil edin.');
-            return;
-        }
-
-        // 3. Şifrə uzunluğu yoxlaması
-        if (password.length < 6) {
-            setError('Şifrə ən azı 6 simvoldan ibarət olmalıdır.');
-            return;
-        }
-
-        setError('');
+    const handleLoginSubmit = (data) => {
         const mockToken = 'mock_jwt_' + Math.random().toString(36).substring(2);
-        localStorage.setItem('authToken', mockToken);
-        localStorage.setItem('userEmail', email);
+        const expiryTime = Date.now() + 2 * 60 * 1000;
+
+        localStorage.setItem('token', mockToken);
+        localStorage.setItem('token_expiry', expiryTime);
+        localStorage.setItem('userEmail', data.email);
 
         navigate('/dashboard', { replace: true });
     };
@@ -51,18 +33,21 @@ export default function Login() {
                 <h2>Sistemə Giriş</h2>
                 <p>Davam etmək üçün məlumatlarınızı daxil edin.</p>
 
-                <form onSubmit={handleLoginSubmit}>
+                <form onSubmit={handleSubmit(handleLoginSubmit)}>
                     <div className="input-group">
                         <label>Elektron Poçt</label>
                         <input
                             type="email"
                             placeholder="name@domain.com"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                                if (error) setError('');
-                            }}
+                            {...register("email", {
+                                required: "Bütün sahələri doldurun!",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Zəhmət olmasa etibarlı email ünvanı daxil edin."
+                                }
+                            })}
                         />
+                        {errors.email && <span className="error-message-text">⚠️ {errors.email.message}</span>}
                     </div>
 
                     <div className="input-group">
@@ -70,15 +55,16 @@ export default function Login() {
                         <input
                             type="password"
                             placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                if (error) setError('');
-                            }}
+                            {...register("password", {
+                                required: "Bütün sahələri doldurun!",
+                                minLength: {
+                                    value: 6,
+                                    message: "Şifrə ən azı 6 simvoldan ibarət olmalıdır."
+                                }
+                            })}
                         />
+                        {errors.password && <span className="error-message-text">⚠️ {errors.password.message}</span>}
                     </div>
-
-                    {error && <span className="error-message-text">⚠️ {error}</span>}
 
                     <button type="submit" className="btn-submit">
                         Daxil Ol
