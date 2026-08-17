@@ -41,3 +41,11 @@ Layihəyə ErrorBoundary komponenti əlavə etmişəm. Hər hansı alt komponent
 
 ## Checkpoint 7: Qovluq strukturu
 Feature-based : Kodları səliqəli saxlamaq üçün hər şeyi bir yerə yığmaq əvəzində funksiyalarına görə qovluqlara böldüm. İndi auth (girişlə bağlı hər şey) və media (əsas səhifə və kontekst) öz ayrı qovluqlarındadır. Bu cür struktur tətbiqi böyütməyi və hər hansı faylı tapıb düzəltməyi xeyli asanlaşdırır. Ortaq komponentləri isə components içində saxlamışam.
+
+Token Expiration: localStorage-də tokenlə birlikdə bitmə vaxtı (token_expiry) saxlanıldı və Dashboard daxilində setInterval ilə  yoxlanılaraq vaxt bitdikdə istifadəçi avtomatik olaraq /login səhifəsinə yönləndirir.
+
+Guest Guard: Sistemdə aktiv tokeni olan istifadəçinin yenidən /login səhifəsinə daxil olmasının qarşısı alınır və avtomatik olaraq Dashboard-a yönləndirilir.
+
+Form Validasiyası: Manual useState məntiqi react-hook-form kitabxanası ilə əvəz edərək formun re-render optimizasiyasını təmin etdim.
+
+Error Boundary Sınağı: ErrorBoundary mexanizmini test etmək üçün UI hissəsinə "Sistemi Çökdür" düyməsi əlavə olundu.
