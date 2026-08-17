@@ -8,8 +8,10 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
+        const token = localStorage.getItem('token');
+        const expiry = localStorage.getItem('token_expiry');
+
+        if (token && expiry && Date.now() < Number(expiry)) {
             navigate('/dashboard', { replace: true });
         }
     }, [navigate]);
