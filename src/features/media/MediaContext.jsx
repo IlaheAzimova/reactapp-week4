@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { fetchMediaApi, addMediaApi, updateFavoriteApi, deleteMediaApi } from './mediaApi';
 
 const MediaContext = createContext();
-
-const API_URL = 'https://6a8219a2400f94b23c6fcba7.mockapi.io/media';
 
 const initialState = {
     mediaList: [],
@@ -32,15 +31,12 @@ function mediaReducer(state, action) {
 export function MediaProvider({ children }) {
     const [state, dispatch] = useReducer(mediaReducer, initialState);
 
-    // READ (GET)
     useEffect(() => {
-        fetch(API_URL)
-            .then(res => res.json())
+        fetchMediaApi()
             .then(data => dispatch({ type: 'SET_MEDIA', payload: data }))
             .catch(err => console.error("Fetch xətası:", err));
     }, []);
 
-    // CREATE (POST)
     const addMedia = async (title, type) => {
         const tempId = Date.now().toString();
         const newItem = { id: tempId, title, type, year: new Date().getFullYear(), favorite: false };
@@ -48,12 +44,7 @@ export function MediaProvider({ children }) {
         dispatch({ type: 'ADD_MEDIA', payload: newItem });
 
         try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, type, year: newItem.year, favorite: false })
-            });
-            const savedItem = await res.json();
+            const savedItem = await addMediaApi({ title, type, year: newItem.year, favorite: false });
             if (savedItem.id !== tempId) {
                 dispatch({ type: 'DELETE_MEDIA', payload: tempId });
                 dispatch({ type: 'ADD_MEDIA', payload: savedItem });
@@ -64,35 +55,26 @@ export function MediaProvider({ children }) {
         }
     };
 
-    // UPDATE 
     const toggleFavorite = async (id, currentStatus) => {
         dispatch({ type: 'TOGGLE_FAVORITE', payload: id });
         try {
-            await fetch(`${API_URL}/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ favorite: !currentStatus })
-            });
+            await updateFavoriteApi(id, !currentStatus);
         } catch {
             dispatch({ type: 'TOGGLE_FAVORITE', payload: id });
         }
     };
 
-
-    // DELETE 
-
     const deleteMedia = async (id) => {
         dispatch({ type: 'DELETE_MEDIA', payload: id });
-        if (!isNaN(id) && String(id).length < 5) {
-            return;
-        }
+        if (!isNaN(id) && String(id).length < 5) return;
 
         try {
-            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            await deleteMediaApi(id);
         } catch {
-
+            // Xəta olarsa
         }
     };
+
     return (
         <MediaContext.Provider value={{ mediaList: state.mediaList, addMedia, deleteMedia, toggleFavorite }}>
             {children}
