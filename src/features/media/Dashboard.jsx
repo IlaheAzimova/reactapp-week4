@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMedia } from './MediaContext';
 
@@ -14,8 +14,29 @@ export default function Dashboard() {
     const [formError, setFormError] = useState('');
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
+    const [explode, setExplode] = useState(false);
+
+    useEffect(() => {
+        const checkToken = () => {
+            const token = localStorage.getItem('token');
+            const expiry = localStorage.getItem('token_expiry');
+
+            if (!token || !expiry || Date.now() > Number(expiry)) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('token_expiry');
+                localStorage.removeItem('userEmail');
+                alert("Tokenin vaxtı bitdi! Yenidən daxil olun.");
+                navigate('/login', { replace: true });
+            }
+        };
+
+        const interval = setInterval(checkToken, 3000);
+        return () => clearInterval(interval);
+    }, [navigate]);
+
     const handleLogout = useCallback(() => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('token_expiry');
         localStorage.removeItem('userEmail');
         navigate('/login', { replace: true });
     }, [navigate]);
@@ -41,6 +62,10 @@ export default function Dashboard() {
         .filter(item => (showFavoritesOnly ? item.favorite : true))
         .filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
+    if (explode) {
+        throw new Error("Test xətası: Error Boundary yoxlanılır!");
+    }
+
     return (
         <div className="dashboard-container">
             <div className="dashboard-nav">
@@ -48,9 +73,16 @@ export default function Dashboard() {
                     <h3>🎬 Media Arxivi </h3>
                     <span>{userEmail}</span>
                 </div>
-                <button onClick={handleLogout} className="btn-logout">Çıxış Et</button>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <button
+                        onClick={() => setExplode(true)}
+                        style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                        💥 Sistemi Çökdür
+                    </button>
+                    <button onClick={handleLogout} className="btn-logout">Çıxış Et</button>
+                </div>
             </div>
-
 
             <div className="panel-card panel-margin-bottom">
                 <h4>Yeni Media Əlavə Et</h4>
@@ -73,7 +105,6 @@ export default function Dashboard() {
                 </form>
             </div>
 
-            {/* Axtarış və Siyahı */}
             <div className="panel-card">
                 <div className="list-header-row">
                     <h4 className="list-header-title">Kolleksiya</h4>
@@ -106,11 +137,11 @@ export default function Dashboard() {
                                     <span className="media-title-text">{item.title}</span>
                                 </div>
                                 <div className="item-actions-group">
-                                    {/* Favorit ulduzu */}
+
                                     <button onClick={() => toggleFavorite(item.id, item.favorite)} className="fav-toggle-btn">
                                         {item.favorite ? '⭐' : '☆'}
                                     </button>
-                                    {/* Silmə düyməsi */}
+
                                     <button onClick={() => deleteMedia(item.id)} className="btn-delete-item">
                                         🗑️
                                     </button>
