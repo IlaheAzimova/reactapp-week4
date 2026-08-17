@@ -43,16 +43,21 @@ export function MediaProvider({ children }) {
 
         dispatch({ type: 'ADD_MEDIA', payload: newItem });
 
-        try {
-            const savedItem = await addMediaApi({ title, type, year: newItem.year, favorite: false });
-            if (savedItem.id !== tempId) {
+        setTimeout(async () => {
+            const currentListSnapshot = state.mediaList;
+            console.log("Stale closure test - Cari siyahının uzunluğu:", currentListSnapshot.length);
+
+            try {
+                const savedItem = await addMediaApi({ title, type, year: newItem.year, favorite: false });
+                if (savedItem.id !== tempId) {
+                    dispatch({ type: 'DELETE_MEDIA', payload: tempId });
+                    dispatch({ type: 'ADD_MEDIA', payload: savedItem });
+                }
+            } catch {
                 dispatch({ type: 'DELETE_MEDIA', payload: tempId });
-                dispatch({ type: 'ADD_MEDIA', payload: savedItem });
+                alert('Yaradılmadı, server xətası!');
             }
-        } catch {
-            dispatch({ type: 'DELETE_MEDIA', payload: tempId });
-            alert('Yaradılmadı, server xətası!');
-        }
+        }, 500);
     };
 
     const toggleFavorite = async (id, currentStatus) => {
